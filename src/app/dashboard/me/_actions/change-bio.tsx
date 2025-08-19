@@ -3,15 +3,16 @@
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { error } from "console";
 
-const changeNameSchema = z.object({
-  name: z.string().min(3, "O nome precisa ter no mínimo 3 caracteres"),
+const changeDescriptionSchema = z.object({
+  description: z
+    .string()
+    .min(3, "A descrição precisa ter no mínimo 3 caracteres"),
 });
 
-type ChangeNameSchema = z.infer<typeof changeNameSchema>;
+type ChangeDescriptionSchema = z.infer<typeof changeDescriptionSchema>;
 
-export async function changeName(data: ChangeNameSchema) {
+export async function changeDescription(data: ChangeDescriptionSchema) {
   const session = await auth();
   const userId = session?.user.id;
 
@@ -22,7 +23,7 @@ export async function changeName(data: ChangeNameSchema) {
     };
   }
 
-  const schema = changeNameSchema.safeParse(data);
+  const schema = changeDescriptionSchema.safeParse(data);
 
   if (!schema.success) {
     return {
@@ -35,7 +36,7 @@ export async function changeName(data: ChangeNameSchema) {
     const user = await prisma.user.update({
       where: { id: userId },
       data: {
-        name: data.name,
+        bio: data.description,
       },
     });
 

@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useState, useRef } from "react";
 import { debounce } from "lodash";
-import { changeName } from "../_actions/chage-name";
+import { changeName } from "../_actions/change-name";
 import { toast } from "sonner";
 
 const Name = ({ initialName }: { initialName: string }) => {
