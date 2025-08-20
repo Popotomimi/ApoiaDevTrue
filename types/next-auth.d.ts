@@ -11,5 +11,6 @@ declare module "next-auth" {
     email?: string;
     username?: string;
     bio?: string;
+    connectedStripeAccount?: string | null;
   }
 }

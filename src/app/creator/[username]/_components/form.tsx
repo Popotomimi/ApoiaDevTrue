@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -14,8 +15,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { createPayment } from "../_actions/create-payment";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+
+type FormData = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório"),
@@ -25,14 +28,13 @@ const formSchema = z.object({
   }),
 });
 
-type FormaData = z.infer<typeof formSchema>;
-
-function onSubmit(values: z.infer<typeof formSchema>) {
-  console.log("Oba", values);
+interface FormDonateProps {
+  creatorId: string;
+  slug: string;
 }
 
-const FormDonate = () => {
-  const form = useForm<FormaData>({
+const FormDonate = ({ slug, creatorId }: FormDonateProps) => {
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -40,6 +42,18 @@ const FormDonate = () => {
       price: "15",
     },
   });
+
+  async function onSubmit(data: FormData) {
+    const priceInCents = Number(data.price) * 100;
+
+    const checkout = await createPayment({
+      name: data.name,
+      message: data.message,
+      creatorId: creatorId,
+      slug: slug,
+      price: priceInCents,
+    });
+  }
 
   return (
     <Form {...form}>
