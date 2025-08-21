@@ -23,7 +23,7 @@ export default async function Dashboard() {
           <h1 className="text-2xl font-semibold">Minha conta</h1>
           {accountUrl && (
             <a
-              className="bg-zinc-900 px-4 py-1 rounded-md cursor-pointer"
+              className="bg-zinc-900 px-4 py-1 rounded-md cursor-pointer text-white"
               href={accountUrl}>
               Ajustar conta{" "}
             </a>
